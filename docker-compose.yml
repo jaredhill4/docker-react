@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  web:
+    # Fixes issue mentioned here:
+    # - https://github.com/facebook/create-react-app/issues/8688
+    # - https://stackoverflow.com/questions/60790696/react-scripts-start-exiting-in-docker-foreground-cmd
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+      - .:/app
+
+  tests:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: ["npm", "run", "test"]
