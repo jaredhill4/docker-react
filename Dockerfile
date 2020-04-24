@@ -1,13 +1,10 @@
-# Build phase
-FROM node:alpine as builder
-WORKDIR /app
-COPY package.json .
+FROM node:alpine
+WORKDIR '/app'
+COPY package*.json ./
 RUN npm install
-COPY . .
+COPY ./ ./
 RUN npm run build
-# Our build files will be stored in /app/build
 
-# Run phase
 FROM nginx
 EXPOSE 80
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
